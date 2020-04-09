@@ -24,7 +24,7 @@ env:
     - MAGENTO_COMPATIBILITY_FILE=${TRAVIS_BUILD_DIR}/build/bin/new-shop-releases.txt
 
 matrix:
-  # these stages are allowed to fail
+  ## these stages are allowed to fail
   allow_failures:
   - stage: acceptance-test
     env:
