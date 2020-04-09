@@ -1,0 +1,31 @@
+name: Change release version
+
+on:
+  pull_request:
+    types: opened
+
+jobs:
+  change-version:
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'RC-')
+    name: Change release version
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v2.0.0
+        with:
+          ref: ${{ github.head_ref }}
+      - name: change extension version
+        id: check-version
+        uses: brkicadis/extension-version-check-action@master
+        with:
+          repository: ${{ github.event.repository.name }}
+      - name: set global git conf
+        run: git config --global user.email "" && git config --global user.name "github-actions"
+      - name: commit files
+        run: git commit -m "Change release version" -a
+      - name: push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.head_ref }}
+          github_token: ${{ secrets.TOKEN }}
